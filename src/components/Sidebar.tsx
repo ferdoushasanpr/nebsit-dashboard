@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import Logo from "../assets/Logo.png";
 import {
   LayoutDashboard,
   Users,
@@ -51,12 +52,7 @@ export default function Sidebar() {
     <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col font-sans">
       {/* Logo */}
       <div className="p-6 flex items-center gap-2">
-        <div className="w-8 h-8 bg-black rounded flex items-center justify-center">
-          <span className="text-orange-500 font-black text-xl">N</span>
-        </div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-800">
-          Nebs-IT
-        </h1>
+        <img src={Logo} alt="Nebsit Logo" className="h-6 w-auto" />
       </div>
 
       {/* Navigation */}
