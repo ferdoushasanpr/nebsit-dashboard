@@ -24,9 +24,8 @@ const menuItems = [
     icon: Users,
     path: "/employees",
     hasDropdown: true,
-    // Added sub-items from the design
     subItems: [
-      { name: "Employee Database", path: "/employees/database" },
+      { name: "Employee Database", path: "/employees" },
       { name: "Add New Employee", path: "/employees/add" },
       { name: "Performance Report", path: "/employees/performance-report" },
       { name: "Performance History", path: "/employees/performance-history" },

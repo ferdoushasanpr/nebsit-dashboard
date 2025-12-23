@@ -112,7 +112,7 @@ export default function Employee() {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6 flex flex-wrap items-center gap-4">
+      <div className="p-4 rounded-xl mb-6 flex flex-wrap items-center gap-4 justify-end">
         <span className="text-sm font-semibold text-slate-600">Filter by:</span>
         <select className="border border-slate-200 rounded-md px-3 py-2 text-sm text-slate-500 outline-none focus:ring-2 focus:ring-orange-500">
           <option>Departments or individuals</option>
