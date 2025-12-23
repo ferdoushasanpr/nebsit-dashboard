@@ -25,7 +25,7 @@ const menuItems = [
     path: "/employees",
     hasDropdown: true,
     subItems: [
-      { name: "Employee Database", path: "/employees" },
+      { name: "Employee Database", path: "/employees/database" },
       { name: "Add New Employee", path: "/employees/add" },
       { name: "Performance Report", path: "/employees/performance-report" },
       { name: "Performance History", path: "/employees/performance-history" },
@@ -44,17 +44,14 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
-  // State to handle which dropdown is currently open
   const [openDropdown, setOpenDropdown] = useState<string | null>("Employee");
 
   return (
     <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col font-sans">
-      {/* Logo */}
       <div className="p-6 flex items-center gap-2">
         <img src={Logo} alt="Nebsit Logo" className="h-6 w-auto" />
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 px-4 overflow-y-auto">
         <ul className="space-y-1">
           {menuItems.map((item) => (
@@ -63,12 +60,9 @@ export default function Sidebar() {
                 <div className="flex flex-col">
                   <NavLink
                     to={item.path}
-                    onClick={(e) => {
+                    onClick={() => {
                       if (item.hasDropdown) {
-                        e.preventDefault(); // Prevent navigation if it's a dropdown toggle
-                        setOpenDropdown(
-                          openDropdown === item.name ? null : item.name
-                        );
+                        setOpenDropdown(item.name);
                       }
                     }}
                     className={({ isActive }) =>
@@ -95,7 +89,6 @@ export default function Sidebar() {
                     )}
                   </NavLink>
 
-                  {/* Dropdown Options */}
                   {item.hasDropdown &&
                     openDropdown === item.name &&
                     item.subItems && (

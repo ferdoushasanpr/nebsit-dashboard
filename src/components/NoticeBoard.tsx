@@ -81,9 +81,7 @@ export default function NoticeBoard() {
   };
 
   return (
-    /* Relative positioning here ensures the absolute modal stays inside this div */
     <div className="relative overflow-hidden">
-      {/* Navigation Header */}
       <div className="flex items-center gap-4 mb-6">
         <button
           type="button"
@@ -103,7 +101,6 @@ export default function NoticeBoard() {
         </div>
 
         <div className="p-8 space-y-8">
-          {/* Target Selection */}
           <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100">
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               <span className="text-red-500 mr-1">*</span> Target Department(s)
@@ -128,7 +125,6 @@ export default function NoticeBoard() {
             </div>
           </div>
 
-          {/* Title Input */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               <span className="text-red-500 mr-1">*</span> Notice Title
@@ -144,7 +140,6 @@ export default function NoticeBoard() {
             />
           </div>
 
-          {/* Employee Details Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -195,7 +190,6 @@ export default function NoticeBoard() {
             </div>
           </div>
 
-          {/* Notice Type Dropdown */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -245,7 +239,6 @@ export default function NoticeBoard() {
             </div>
           </div>
 
-          {/* Notice Body */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               Notice Body
@@ -260,7 +253,6 @@ export default function NoticeBoard() {
             />
           </div>
 
-          {/* Upload Attachments */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               Upload Attachments (optional)
@@ -288,7 +280,6 @@ export default function NoticeBoard() {
           </div>
         </div>
 
-        {/* Footer Actions */}
         <div className="p-8 flex justify-end items-center gap-4 bg-slate-50/30 border-t border-slate-100">
           <button
             type="button"
@@ -317,11 +308,9 @@ export default function NoticeBoard() {
         </div>
       </form>
 
-      {/* SUCCESS MODAL - BOUND TO COMPONENT */}
       {activeModal === "success" && (
         <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] z-50 flex items-center justify-center p-6">
           <div className="bg-white rounded-[0.5rem] px-14 py-12 max-w-2xl w-full text-center shadow-xl animate-in fade-in zoom-in duration-300">
-            {/* Success Icon Circle */}
             <div className="w-24 h-24 bg-[#10B981] rounded-full flex items-center justify-center mx-auto mb-10 shadow-lg shadow-emerald-100">
               <Check size={56} className="text-white stroke-[4px]" />
             </div>
@@ -337,7 +326,6 @@ export default function NoticeBoard() {
               has been published and is now visible to all selected departments.
             </p>
 
-            {/* Styled Modal Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
                 type="button"

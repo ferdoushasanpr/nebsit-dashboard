@@ -87,7 +87,6 @@ const notices = [
 export default function Employee() {
   return (
     <>
-      {/* Header Section */}
       <div className="flex justify-between items-start mb-6">
         <div>
           <h1 className="text-2xl font-semibold text-slate-800">
@@ -110,8 +109,6 @@ export default function Employee() {
           </button>
         </div>
       </div>
-
-      {/* Filter Bar */}
       <div className="p-4 rounded-xl mb-6 flex flex-wrap items-center gap-4 justify-end">
         <span className="text-sm font-semibold text-slate-600">Filter by:</span>
         <select className="border border-slate-200 rounded-md px-3 py-2 text-sm text-slate-500 outline-none focus:ring-2 focus:ring-orange-500">
@@ -140,8 +137,6 @@ export default function Employee() {
           Reset Filters
         </button>
       </div>
-
-      {/* Data Table */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -225,8 +220,6 @@ export default function Employee() {
           </tbody>
         </table>
       </div>
-
-      {/* Pagination */}
       <div className="flex justify-center items-center gap-2 mt-8">
         <button className="p-2 text-slate-400 hover:text-slate-600">
           <ChevronLeft size={20} />
