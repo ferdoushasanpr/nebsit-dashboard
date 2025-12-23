@@ -18,7 +18,9 @@ export default function MainComponent({ children }: MainComponentProps) {
             <h1 className="text-lg font-semibold">Dashboard Navbar</h1>
           </header>
           {/* Dashboard Content */}
-          <div className="p-6">{children}</div>
+          <div className="p-8 bg-slate-50 min-h-screen font-sans">
+            {children}
+          </div>
         </main>
       </div>
     </div>
