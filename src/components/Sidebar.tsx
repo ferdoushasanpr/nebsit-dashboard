@@ -15,6 +15,7 @@ import {
   LogOut,
   User,
   ChevronDown,
+  X, // Added for mobile close button
 } from "lucide-react";
 
 const menuItems = [
@@ -43,16 +44,35 @@ const menuItems = [
   { name: "Profile", icon: User },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void; // Prop to handle closing mobile drawer
+}
+
+export default function Sidebar({ onClose }: SidebarProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>("Employee");
 
+  // Helper to close sidebar on mobile after clicking a link
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768 && onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col font-sans">
-      <div className="p-6 flex items-center gap-2">
+    <aside className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col font-sans relative">
+      <div className="p-6 flex items-center justify-between gap-2">
         <img src={Logo} alt="Nebsit Logo" className="h-6 w-auto" />
+
+        {/* Mobile-only Close Button */}
+        <button
+          onClick={onClose}
+          className="md:hidden p-1 text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          <X size={20} />
+        </button>
       </div>
 
-      <nav className="flex-1 px-4 overflow-y-auto">
+      <nav className="flex-1 px-4 overflow-y-auto pb-8">
         <ul className="space-y-1">
           {menuItems.map((item) => (
             <li key={item.name}>
@@ -60,11 +80,14 @@ export default function Sidebar() {
                 <div className="flex flex-col">
                   <NavLink
                     to={item.path}
-                    onClick={() => {
+                    onClickCapture={() => {
                       if (item.hasDropdown) {
-                        setOpenDropdown(item.name);
+                        setOpenDropdown(
+                          openDropdown === item.name ? null : item.name
+                        );
                       }
                     }}
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       `w-full flex items-center justify-between p-3 rounded-lg transition-colors group ${
                         isActive ||
@@ -89,6 +112,7 @@ export default function Sidebar() {
                     )}
                   </NavLink>
 
+                  {/* Dropdown Content */}
                   {item.hasDropdown &&
                     openDropdown === item.name &&
                     item.subItems && (
@@ -97,6 +121,7 @@ export default function Sidebar() {
                           <li key={sub.name}>
                             <NavLink
                               to={sub.path}
+                              onClick={handleLinkClick} // Close on mobile
                               className={({ isActive }) =>
                                 `block py-2.5 pl-11 pr-4 text-sm font-medium transition-colors rounded-lg ${
                                   isActive
@@ -113,6 +138,7 @@ export default function Sidebar() {
                     )}
                 </div>
               ) : (
+                /* Static buttons for items without paths */
                 <button
                   className="w-full flex items-center gap-3 p-3 text-slate-500 hover:bg-gray-50 rounded-lg"
                   onClick={() =>

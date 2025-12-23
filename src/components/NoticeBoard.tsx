@@ -92,25 +92,29 @@ export default function NoticeBoard() {
 
   return (
     <div className="relative overflow-hidden">
-      <div className="flex items-center gap-4 mb-6">
+      {/* Header - Fixed spacing for mobile */}
+      <div className="flex items-center gap-3 md:gap-4 mb-6">
         <button
           type="button"
           className="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 shadow-sm transition-all"
         >
           <ChevronLeft size={20} className="text-slate-600" />
         </button>
-        <h1 className="text-xl font-bold text-slate-800">Create a Notice</h1>
+        <h1 className="text-lg md:text-xl font-bold text-slate-800">
+          Create a Notice
+        </h1>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+        className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-10"
       >
-        <div className="p-6 border-b border-slate-100 bg-slate-50/50 text-sm font-semibold text-slate-600 uppercase tracking-wider">
+        <div className="p-4 md:p-6 border-b border-slate-100 bg-slate-50/50 text-xs md:text-sm font-semibold text-slate-600 uppercase tracking-wider">
           Please fill in the details below
         </div>
 
-        <div className="p-8 space-y-8">
+        {/* Form Body - Adjusted padding for mobile */}
+        <div className="p-5 md:p-8 space-y-6 md:space-y-8">
           <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-100">
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               <span className="text-red-500 mr-1">*</span> Target Department(s)
@@ -150,7 +154,8 @@ export default function NoticeBoard() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Grid: 1 col on mobile, 3 cols on desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 <span className="text-red-500 mr-1">*</span> Select Employee ID
@@ -200,7 +205,8 @@ export default function NoticeBoard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Grid: 1 col on mobile, 2 cols on desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div className="relative">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 <span className="text-red-500 mr-1">*</span> Notice Type
@@ -267,7 +273,8 @@ export default function NoticeBoard() {
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               Upload Attachments (optional)
             </label>
-            <div className="border-2 border-dashed border-emerald-300 rounded-xl p-10 bg-emerald-50/20 text-center cursor-pointer hover:bg-emerald-50/40 transition-all">
+            {/* Reduced upload box padding on mobile */}
+            <div className="border-2 border-dashed border-emerald-300 rounded-xl p-6 md:p-10 bg-emerald-50/20 text-center cursor-pointer hover:bg-emerald-50/40 transition-all">
               <Upload className="mx-auto text-emerald-500 mb-3" size={28} />
               <p className="text-sm text-slate-600">
                 <span className="text-sky-500 font-bold">Upload</span> file or
@@ -279,34 +286,35 @@ export default function NoticeBoard() {
             </div>
             <div className="mt-4 inline-flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
               <Paperclip size={14} className="text-slate-500" />
-              <span className="text-xs text-slate-600 font-medium">
+              <span className="text-xs text-slate-600 font-medium truncate max-w-[150px]">
                 Policy_Document.pdf
               </span>
               <X
                 size={14}
-                className="text-red-400 hover:text-red-600 cursor-pointer"
+                className="text-red-400 hover:text-red-600 cursor-pointer shrink-0"
               />
             </div>
           </div>
         </div>
 
-        <div className="p-8 flex justify-end items-center gap-4 bg-slate-50/30 border-t border-slate-100">
+        {/* Footer Actions - Flexible wrapping for mobile */}
+        <div className="p-5 md:p-8 flex flex-col md:flex-row justify-end items-center gap-3 md:gap-4 bg-slate-50/30 border-t border-slate-100">
           <button
             type="button"
-            className="px-10 py-2.5 border border-slate-400 rounded-full text-sm font-medium text-slate-600 hover:bg-white"
+            className="w-full md:w-auto px-10 py-2.5 border border-slate-400 rounded-full text-sm font-medium text-slate-600 hover:bg-white order-3 md:order-1"
           >
             Cancel
           </button>
           <button
             type="button"
-            className="px-10 py-2.5 border border-sky-500 bg-sky-50 rounded-full text-sm font-medium text-sky-600 hover:bg-sky-100"
+            className="w-full md:w-auto px-10 py-2.5 border border-sky-500 bg-sky-50 rounded-full text-sm font-medium text-sky-600 hover:bg-sky-100 order-2"
           >
             Save as Draft
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-10 py-2.5 bg-orange-600 text-white rounded-full text-sm font-bold flex items-center gap-2 hover:bg-orange-700 disabled:opacity-70 transition-all"
+            className="w-full md:w-auto px-10 py-2.5 bg-orange-600 text-white rounded-full text-sm font-bold flex items-center justify-center gap-2 hover:bg-orange-700 disabled:opacity-70 transition-all order-1 md:order-3"
           >
             {isSubmitting ? (
               <Loader2 className="animate-spin" size={18} />
@@ -318,29 +326,34 @@ export default function NoticeBoard() {
         </div>
       </form>
 
+      {/* Responsive Success Modal */}
       {activeModal === "success" && (
-        <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] z-50 flex items-center justify-center p-6">
-          <div className="bg-white rounded-[0.5rem] px-14 py-12 max-w-2xl w-full text-center shadow-xl animate-in fade-in zoom-in duration-300">
-            <div className="w-24 h-24 bg-[#10B981] rounded-full flex items-center justify-center mx-auto mb-10 shadow-lg shadow-emerald-100">
-              <Check size={56} className="text-white stroke-[4px]" />
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 md:p-6">
+          <div className="bg-white rounded-2xl px-6 md:px-14 py-8 md:py-12 max-w-2xl w-full text-center shadow-xl animate-in fade-in zoom-in duration-300 overflow-y-auto max-h-[90vh]">
+            <div className="w-16 h-16 md:w-24 md:h-24 bg-[#10B981] rounded-full flex items-center justify-center mx-auto mb-6 md:mb-10 shadow-lg shadow-emerald-100">
+              <Check
+                size={32}
+                className="md:size-[56px] text-white stroke-[4px]"
+              />
             </div>
 
-            <h2 className="text-[2.25rem] font-semibold text-[#1E293B] mb-5 leading-tight">
+            <h2 className="text-2xl md:text-[2.25rem] font-semibold text-[#1E293B] mb-3 md:mb-5 leading-tight">
               Notice Published Successfully
             </h2>
-            <p className="text-[#64748B] mb-12 text-lg leading-relaxed">
+            <p className="text-[#64748B] mb-8 md:mb-12 text-sm md:text-lg leading-relaxed">
               Your notice{" "}
               <span className="font-bold text-[#334155]">
                 “{formData.title || "Holiday Schedule – November 2025"}”
               </span>{" "}
-              has been published and is now visible to all selected departments.
+              has been published and is now visible.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            {/* Modal Buttons: Stack on mobile, side-by-side on desktop */}
+            <div className="flex flex-col md:flex-row gap-3 md:gap-4 justify-center items-center">
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-full sm:w-auto px-10 py-2.5 border border-[#3B82F6] text-[#3B82F6] rounded-full font-semibold text-base hover:bg-blue-50 transition-colors"
+                className="w-full md:w-auto px-8 py-2.5 border border-[#3B82F6] text-[#3B82F6] rounded-full font-semibold text-sm md:text-base hover:bg-blue-50 transition-colors"
               >
                 View Notice
               </button>
@@ -360,7 +373,7 @@ export default function NoticeBoard() {
                     body: "",
                   });
                 }}
-                className="w-full sm:w-auto px-10 py-2.5 border border-[#F97316] text-[#F97316] rounded-full font-semibold text-base flex items-center justify-center gap-2 hover:bg-orange-50 transition-colors"
+                className="w-full md:w-auto px-8 py-2.5 border border-[#F97316] text-[#F97316] rounded-full font-semibold text-sm md:text-base flex items-center justify-center gap-2 hover:bg-orange-50 transition-colors"
               >
                 <span className="text-xl">+</span> Create Another
               </button>
@@ -368,7 +381,7 @@ export default function NoticeBoard() {
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="w-full sm:w-auto px-10 py-2.5 border border-[#334155] text-[#334155] rounded-full font-semibold text-base hover:bg-slate-50 transition-colors"
+                className="w-full md:w-auto px-8 py-2.5 border border-[#334155] text-[#334155] rounded-full font-semibold text-sm md:text-base hover:bg-slate-50 transition-colors"
               >
                 Close
               </button>
