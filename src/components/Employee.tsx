@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import type { ChangeEvent } from "react";
 import {
   Plus,
   FileEdit,
@@ -7,84 +9,75 @@ import {
   ChevronLeft,
   ChevronRight,
   Calendar,
+  Loader2,
 } from "lucide-react";
 
-const notices = [
-  {
-    id: 1,
-    title: "Office closed on Friday for maintenance.",
-    type: "General / Company-Wide",
-    target: "All Department",
-    date: "15-Jun-2025",
-    status: "Published",
-    color: "blue",
-  },
-  {
-    id: 2,
-    title: "Eid al-Fitr holiday schedule.",
-    type: "Holiday & Event",
-    target: "Finance",
-    date: "15-Jun-2025",
-    status: "Published",
-    color: "green",
-  },
-  {
-    id: 3,
-    title: "Updated code of conduct policy",
-    type: "HR & Policy Update",
-    target: "Sales Team",
-    date: "15-Jun-2025",
-    status: "Published",
-    color: "orange",
-  },
-  {
-    id: 4,
-    title: "Payroll for October will be processed on 28th",
-    type: "Finance & Payroll",
-    target: "Web Team",
-    date: "15-Jun-2025",
-    status: "Published",
-    color: "indigo",
-  },
-  {
-    id: 5,
-    title: "System update scheduled for 30 Oct (9:00-11:00 PM)",
-    type: "IT / System Maintenance",
-    target: "Database Team",
-    date: "15-Jun-2025",
-    status: "Published",
-    color: "slate",
-  },
-  {
-    id: 6,
-    title: "Design team sprint review moved to Tuesday.",
-    type: "Department / Team",
-    target: "Admin",
-    date: "15-Jun-2025",
-    status: "Published",
-    color: "purple",
-  },
-  {
-    id: 7,
-    title: "Unauthorized absence recorded on 18 Oct 2025",
-    type: "Warning / Disciplinary",
-    target: "Individual",
-    date: "15-Jun-2025",
-    status: "Unpublished",
-    color: "cyan",
-  },
-  {
-    id: 8,
-    title: "Office closed today due to severe weather",
-    type: "Emergency / Urgent",
-    target: "HR",
-    date: "15-Jun-2025",
-    status: "Draft",
-    color: "red",
-  },
-];
+interface Notice {
+  id: number;
+  title: string;
+  type: string;
+  target: string;
+  date: string;
+  status: "Published" | "Unpublished" | "Draft";
+  color: string;
+}
 
 export default function Employee() {
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const fetchNotices = async () => {
+    try {
+      setLoading(true);
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${baseUrl}/api/notices`);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data: Notice[] = await response.json();
+      setNotices(data);
+    } catch (error) {
+      console.error("Error fetching notices:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotices();
+  }, []);
+
+  const handleToggleStatus = async (
+    id: number,
+    currentStatus: Notice["status"]
+  ) => {
+    if (currentStatus === "Draft") return;
+    const newStatus: Notice["status"] =
+      currentStatus === "Published" ? "Unpublished" : "Published";
+
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${baseUrl}/api/notices/${id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (response.ok) {
+        setNotices((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, status: newStatus } : n))
+        );
+      }
+    } catch (error) {
+      console.error("Failed to update status", error);
+    }
+  };
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const activeCount = notices.filter((n) => n.status === "Published").length;
+  const draftCount = notices.filter((n) => n.status === "Draft").length;
+
   return (
     <>
       <div className="flex justify-between items-start mb-6">
@@ -94,10 +87,12 @@ export default function Employee() {
           </h1>
           <div className="flex gap-4 mt-1 text-sm">
             <span className="text-emerald-500 font-medium">
-              Active Notices: 8
+              Active Notices: {activeCount}
             </span>
             <span className="text-slate-300">|</span>
-            <span className="text-amber-500 font-medium">Draft Notice: 04</span>
+            <span className="text-amber-500 font-medium">
+              Draft Notice: {draftCount}
+            </span>
           </div>
         </div>
         <div className="flex gap-3">
@@ -109,6 +104,7 @@ export default function Employee() {
           </button>
         </div>
       </div>
+
       <div className="p-4 rounded-xl mb-6 flex flex-wrap items-center gap-4 justify-end">
         <span className="text-sm font-semibold text-slate-600">Filter by:</span>
         <select className="border border-slate-200 rounded-md px-3 py-2 text-sm text-slate-500 outline-none focus:ring-2 focus:ring-orange-500">
@@ -116,6 +112,8 @@ export default function Employee() {
         </select>
         <input
           type="text"
+          value={searchTerm}
+          onChange={handleSearchChange}
           placeholder="Employee Id or Name"
           className="border border-slate-200 rounded-md px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-orange-500 w-48"
         />
@@ -133,19 +131,29 @@ export default function Employee() {
             size={16}
           />
         </div>
-        <button className="flex items-center gap-2 text-blue-500 border border-blue-100 bg-blue-50 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100">
+        <button
+          onClick={() => {
+            setSearchTerm("");
+            fetchNotices();
+          }}
+          className="flex items-center gap-2 text-blue-500 border border-blue-100 bg-blue-50 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-100"
+        >
           Reset Filters
         </button>
       </div>
-      <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative min-h-[400px]">
+        {loading && (
+          <div className="absolute inset-0 bg-white/60 z-20 flex items-center justify-center">
+            <Loader2 className="animate-spin text-orange-600" size={32} />
+          </div>
+        )}
+
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
               <th className="p-4 w-12">
-                <input
-                  type="checkbox"
-                  className="rounded text-orange-600 focus:ring-orange-500"
-                />
+                <input type="checkbox" className="rounded text-orange-600" />
               </th>
               <th className="p-4 text-sm font-semibold text-slate-600">
                 Title
@@ -180,18 +188,14 @@ export default function Employee() {
                   {notice.title}
                 </td>
                 <td className="p-4 text-sm text-slate-400">{notice.type}</td>
-                <td
-                  className="p-4 text-sm font-medium"
-                  style={{ color: `var(--tw-text-opacity)` }}
-                >
-                  <span className={`text-${notice.color}-500`}>
-                    {notice.target}
-                  </span>
+                <td className="p-4 text-sm font-medium">
+                  <span style={{ color: notice.color }}>{notice.target}</span>
                 </td>
                 <td className="p-4 text-sm text-slate-400">{notice.date}</td>
                 <td className="p-4">
-                  <span
-                    className={`px-3 py-1 rounded-md text-xs font-medium ${
+                  <button
+                    onClick={() => handleToggleStatus(notice.id, notice.status)}
+                    className={`px-3 py-1 rounded-md text-xs font-medium cursor-pointer transition-colors ${
                       notice.status === "Published"
                         ? "bg-emerald-50 text-emerald-600"
                         : notice.status === "Unpublished"
@@ -200,7 +204,7 @@ export default function Employee() {
                     }`}
                   >
                     {notice.status}
-                  </span>
+                  </button>
                 </td>
                 <td className="p-4">
                   <div className="flex gap-3 text-slate-400">
@@ -220,24 +224,13 @@ export default function Employee() {
           </tbody>
         </table>
       </div>
+
       <div className="flex justify-center items-center gap-2 mt-8">
         <button className="p-2 text-slate-400 hover:text-slate-600">
           <ChevronLeft size={20} />
         </button>
         <button className="w-8 h-8 flex items-center justify-center rounded border border-blue-500 bg-blue-50 text-blue-600 text-sm font-medium">
           1
-        </button>
-        <button className="w-8 h-8 flex items-center justify-center text-slate-500 text-sm hover:bg-slate-100 rounded">
-          2
-        </button>
-        <button className="w-8 h-8 flex items-center justify-center text-slate-500 text-sm hover:bg-slate-100 rounded">
-          3
-        </button>
-        <button className="w-8 h-8 flex items-center justify-center text-slate-500 text-sm hover:bg-slate-100 rounded">
-          4
-        </button>
-        <button className="w-8 h-8 flex items-center justify-center text-slate-500 text-sm hover:bg-slate-100 rounded">
-          5
         </button>
         <button className="p-2 text-slate-400 hover:text-slate-600">
           <ChevronRight size={20} />

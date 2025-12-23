@@ -70,11 +70,21 @@ export default function NoticeBoard() {
     setIsSubmitting(true);
 
     try {
-      console.log("Submitting Notice Data:", formData);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setActiveModal("success");
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${baseUrl}/api/notices`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          status: "Published",
+        }),
+      });
+
+      if (response.ok) {
+        setActiveModal("success");
+      }
     } catch (error) {
-      console.error("Submission error:", error);
+      console.error("API Error:", error);
     } finally {
       setIsSubmitting(false);
     }

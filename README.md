@@ -62,14 +62,6 @@ touch .env
 
 ```env
 # The base URL for your API service
-VITE_API_BASE_URL=https://api.yourdomain.com
-
-# Authentication service configuration (if applicable)
-VITE_AUTH_DOMAIN=your-auth-domain.com
-
-# Environment mode
-VITE_APP_ENV=development
+VITE_API_BASE_URL=https://nebsit-backend.vercel.app
 
 ```
-
-> **Note:** In Vite, all environment variables must be prefixed with `VITE_` to be exposed to your client-side code.
