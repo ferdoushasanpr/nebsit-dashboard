@@ -24,7 +24,7 @@ const menuItems = [
   { name: "Request Center", icon: Send },
   { name: "Career Database", icon: Database, hasDropdown: true },
   { name: "Document manager", icon: FileText },
-  { name: "Notice Board", icon: ClipboardList },
+  { name: "Notice Board", icon: ClipboardList, path: "/noticeboard" },
   { name: "Activity Log", icon: History },
   { name: "Exit Interview", icon: LogOut },
   { name: "Profile", icon: User },
